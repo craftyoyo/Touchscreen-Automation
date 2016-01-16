@@ -1,0 +1,121 @@
+/*body {
+  background-image: url("../img/ny-lg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.blurred-bg {
+  background-image: url("../img/ny-lg-blur.jpg");
+  background-repeat: no-repeat;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  -webkit-background-size: cover;
+  background-size: cover;
+  background-attachment: fixed;
+}
+.blurred-bg.tinted {
+  background-image: url("../img/ny-lg-blur.jpg");
+  background-size: 100%;
+  background-image: -moz-linear-gradient(90deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url("../img/ny-lg-blur.jpg");
+  background-image: -webkit-linear-gradient(90deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url("../img/ny-lg-blur.jpg");
+  background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url("../img/ny-lg-blur.jpg");
+}
+
+.box {
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  color: white;
+  transition: box-shadow .3s ease;
+}*/
+
+#output {
+  font-family: sans-serif;
+  font-size: 80px;
+  font-weight: bold;
+  color: #000;
+  text-align:center;
+}
+
+#screensaver {
+    position: absolute;
+    width: 100%;
+    height:100%;
+    left:0px;
+    top: 0px;
+    display: none;
+    z-index:9999;
+    background: -webkit-linear-gradient(#24C6DC 10%, #514A9D 90%) whitesmoke;
+    background: linear-gradient(#24C6DC 10%, #514A9D 90%) whitesmoke;
+    text-align: center;
+    color: whitesmoke;
+    font-weight: 300;
+}
+
+#screensaver > .content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+
+#screensaver > .content time {
+  display: block;
+  font-size: 3.5rem;
+  line-height: 1.875rem;
+}
+
+#screensaver > .content time:first-of-type {
+  font-size: 13rem;
+  line-height: 20rem;
+}
+
+#screensaver > .unlock {
+  position: absolute;
+  top: 75%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  text-shadow: 0 0 5px whitesmoke;
+  color: rgba(255, 255, 255, 0.5);
+  -webkit-animation: flash 1500ms ease infinite alternate;
+          animation: flash 1500ms ease infinite alternate;
+}
+
+
+.chat
+{
+    height: 562px;
+    overflow-y: scroll;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.chat li
+{
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px dotted #B3A9A9;
+}
+
+.chat li.left .chat-body
+{
+    margin-left: 60px;
+}
+
+.chat li.right .chat-body
+{
+    margin-right: 60px;
+}
+
+
+.chat li .chat-body p
+{
+    margin: 0;
+    color: #777777;
+}
