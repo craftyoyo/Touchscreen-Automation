@@ -36,11 +36,6 @@ sudo rpi-update
 ### MySQL : 
 ```
 sudo apt-get install mysql-server mysql-client python-mysqldb
-sudo nano /etc/mysql/my.cnf
-```
-Search [mysqld] and bind-address replace by the Pi's address
-```
-bind-address = 192.168.0.2 # For me
 ```
 When you're sure MySQL is working, dump the dump.sql file or just create all tables manually
 ```
