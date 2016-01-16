@@ -9,7 +9,7 @@ This project use :
 * Gmail (Calendar)
 * [Flask](http://flask.pocoo.org/)
 
-_You'll have to create an account to use the API_
+_You'll have to create an account to use the API._
 Some apps : 
 * gnome-schedule ```sudo apt-get install gnome-schedule```
 * xscreensaver ```sudo apt-get install xscreensaver```
