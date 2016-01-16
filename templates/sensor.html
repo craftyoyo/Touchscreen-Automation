@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+{% block title %}Sensor{% endblock %}
+{% block head %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/chart.min.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="row" style="text-align:center;">
+        <div class="col-sm-6">
+            <div class="panel panel-default box blurred-bg tinted">
+                <div class="panel-body">
+                    <h1>{{realtime[1]|dhtformat}} °C</h1>
+                    <p style="text-size: 5em;">
+                        Temperature
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="panel panel-default box blurred-bg tinted">
+                <div class="panel-body">
+                    <h1>{{realtime[0]|dhtformat}} %</h1>
+                    <p style="text-size: 5em;">
+                        Humidity
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br><br>
+    <div class="row" style="text-align:center;">
+        <div class="col-sm-12">
+            <div class="panel panel-default box blurred-bg tinted">
+                <div class="panel-body">
+                    <h3>Sensor Humidity / Temperature</h3>
+                    <canvas id="sensors" width="1050" height="400" style="color:white;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var sensorsData = {
+            labels : [
+            {% for data in sensors %}
+                "{{ data[3]|datetimeformat }}",
+            {% endfor %}
+
+            ],
+            datasets: [
+                {
+                    label: "Temperature",
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    scaleFontColor: "#FFF",
+                    tooltipFontColor: "#fff",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    tooltipTitleFontColor: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: [
+                {% for data in sensors %}
+                    {{ data[1] }},
+                {% endfor %}
+                    ]
+                },
+                {
+                    label: "Humidity",
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    scaleFontColor: "#FFF",
+                    tooltipFontColor: "#fff",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    tooltipTitleFontColor: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                    data: [
+                {% for data in sensors %}
+                    {{ data[2] }},
+                {% endfor %}
+                    ]
+                }
+            ]
+        }
+        var sensors = document.getElementById('sensors').getContext('2d');
+        new Chart(sensors).Line(sensorsData, {scaleFontColor: "#000"});
+    </script>
+{% endblock %}

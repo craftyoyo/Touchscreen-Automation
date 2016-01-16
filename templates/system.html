@@ -1,0 +1,95 @@
+{% extends "layout.html" %}
+{% block title %}System{% endblock %}
+{% block head %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/chart.min.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-3">
+            <h3>System</h3>
+            <strong>Hostname :</strong> {{uname[1]}} <br>
+            <strong>Type :</strong> {{raspberry[1]}} <br>
+            <strong>OS :</strong> {{uname[2]}} <br>
+            <strong>IP Address :</strong> {{ip}} <br>
+            <strong>Uptime :</strong> {{uptime}} <br>
+        </div>
+        <div class="col-sm-3">
+            <h3>Cpu</h3>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="{{cpu}}" aria-valuemin="0" aria-valuemax="100" style="width: {{cpu}}%;">
+                {{cpu}}%
+              </div>
+            </div>
+            <strong>CPU Temp :</strong> {{cpu_temp|tempformat}} °C<br>
+        </div>
+        <div class="col-sm-3">
+            <h3>Memory</h3>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="{{mem_percent}}" aria-valuemin="0" aria-valuemax="100" style="width: {{mem_percent}}%;">
+                {{mem_percent}}%
+              </div>
+            </div>
+            <strong>Memory :</strong> {{mem_used}} / {{mem_total}} <br>
+        </div>
+        <div class="col-sm-3">
+            <h3>SD Card</h3>
+            <div class="progress">
+              <div class="progress-bar" role="progressbar" aria-valuenow="{{disk_percent}}" aria-valuemin="0" aria-valuemax="100" style="width: {{disk_percent}}%;">
+                {{disk_percent}}%
+              </div>
+            </div>
+            <strong>Disk :</strong> {{disk_used}} /{{disk_total}} <br>
+
+        </div>
+    </div>
+<br>
+    <div class="row" style="text-align:center;">
+        <div class="col-sm-12">
+            <div class="panel panel-default box blurred-bg tinted">
+                <div class="panel-body">
+                    <h3>Cpu Temp</h3>
+                    <canvas id="cpu" width="1050" height="400" style="color:white;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        var cpuData = {
+            labels : [
+            {% for data in cpu_graph %}
+                "{{ data[2]|datetimeformat }}",
+            {% endfor %}
+
+            ],
+            datasets: [
+                {
+                    label: "Cpu Temperature",
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    scaleFontColor: "#FFF",
+                    tooltipFontColor: "#fff",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    tooltipTitleFontColor: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                    data: [
+                {% for data in cpu_graph %}
+                    {{ data[1] }},
+                {% endfor %}
+                    ]
+                }
+            ]
+        }
+        var cpu = document.getElementById('cpu').getContext('2d');
+        new Chart(cpu).Line(cpuData, {
+		scaleFontColor: "#000",
+        	scaleStartValue : 30 
+	});
+    </script>
+
+{% endblock %}

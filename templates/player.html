@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+{% block title %}Player{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 refresh" style="text-align:center;">
+        <h3>{{current.artist}}</h3>
+        <h2>{{current.title}}</h2>
+        <small><i>({{status.state}})</i></small>
+        <p>
+            <a href="/player/backward" class="btn btn-lg btn-primary"><i class="fa fa-backward" style="color: white;"></i></a>
+            <a href="/player/play" class="btn btn-lg btn-primary"><i class="fa fa-play" style="color: white;"></i></a>
+            <a href="/player/pause" class="btn btn-lg btn-primary"><i class="fa fa-pause" style="color: white;"></i></a>
+            <a href="/player/forward" class="btn btn-lg btn-primary"><i class="fa fa-forward" style="color: white;"></i></a>
+        </p>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="{{variable}}" aria-valuemin="0" aria-valuemax="100" style="width: {{variable}}%;">
+            <span class="sr-only">{{variable}}% Complete</span>
+            </div>
+        </div>
+        <div class="pull-left">
+            {{status.time|currentDuration}}
+        </div>
+
+        <div class="pull-right">
+            {{current.time|duration}}
+        </div>
+
+    </div>
+    <div class="col-md-6">
+        <ul class="list-group chat">
+            {% for entries in playlist %}
+                <li class="list-group-item">
+                    <a href="/player/play/{{ entries.id }}" class="btn btn-xs btn-primary"><i class="fa fa-play" style="color: white;"></i></a>
+                    {{ entries.artist }} - {{ entries.title }} <br>
+                    <small>{{ entries.time|duration }}</small>
+                </li>
+
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<script>
+    var refreshTarget = ".refresh"
+
+    var extractElement = function(targetId, str){
+        var doc = (new DOMParser).parseFromString(str, 'text/html')
+        return doc.querySelector(targetId)
+    }
+
+    var replaceElements = function(targetId, element){
+        var target = document.querySelector(targetId)
+        target.parentElement.replaceChild(element, target)
+    }
+
+    var sendRequest = function(){
+        var req =  new XMLHttpRequest()
+        req.open('GET', window.location.pathname, true)
+        req.onreadystatechange = function () {
+            if(req.readyState === 4 && req.status === 200){
+                replaceElements(refreshTarget, extractElement(refreshTarget, req.response))
+            }
+        }
+        req.send()
+    }
+
+    if(typeof XMLHttpRequest === "function" && refreshTarget){
+        window.setInterval(sendRequest, 1000)
+    }
+</script>
+{% endblock %}
+

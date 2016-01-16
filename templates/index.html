@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='plugins/owfont/css/owfont-regular.min.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/chart.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+
+{% endblock %}
+
+{% block content %}
+<div id="output"></div>
+<div class="row" style="text-align:center;">
+    {% for list in weather.list %}
+        <div class="col-sm-2">
+            <h4>{{list.dt|timestampformat('%A') }}</h4>
+             {% for weather in list.weather %}
+                <i class="owf owf-{{weather.id}} owf-5x"></i>
+                <p style="text-transform: capitalize;">{{weather.description}}</p>
+             {% endfor %}
+            {{list.temp.min}}°C / {{list.temp.max}}°C
+        </div>
+    {% endfor %}
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <h2>Sensor</h2>
+        <canvas id="sensors" width="555" height="280" style="color:white;"></canvas>
+    </div>
+    <div class="col-sm-6">
+        <h2>Switch</h2>
+            <ul class="list-group">
+                {% for pin in pins %}
+                <li class="list-group-item">
+                    {{ pins[pin].name }}
+                    <div style="float:right;">
+                       {% if pins[pin].state == true %}
+                            <span class="btn btn-xs btn-success">On</span>
+                       {% else %}
+                            <span class="btn btn-xs btn-danger">Off</span>
+                       {% endif %}
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+    </div>
+</div>
+
+
+<script>
+    setInterval(function(){
+      var date = new Date();
+      var format = [
+          ("0" + date.getHours()).substr(-2)
+        , ("0" + date.getMinutes()).substr(-2)
+        , ("0" + date.getSeconds()).substr(-2)
+      ].join(":");
+      document.getElementById("output").innerHTML = format;
+    }, 500);
+
+    var sensorsData = {
+        labels : [ {% for data in sensors %} "{{ data[3]|datetimeformat }}", {% endfor %} ],
+        datasets: [
+            {
+                label: "Temperature",
+                fillColor: "rgba(220,220,220,0.2)",
+                strokeColor: "rgba(220,220,220,1)",
+                pointColor: "rgba(220,220,220,1)",
+                scaleFontColor: "#FFF",
+                tooltipFontColor: "#fff",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                tooltipTitleFontColor: "#fff",
+                pointHighlightStroke: "rgba(220,220,220,1)",
+                data: [ {% for data in sensors %} {{ data[1] }}, {% endfor %} ]
+            },
+            {
+                label: "Humidity",
+                fillColor: "rgba(151,187,205,0.2)",
+                strokeColor: "rgba(151,187,205,1)",
+                pointColor: "rgba(151,187,205,1)",
+                scaleFontColor: "#FFF",
+                tooltipFontColor: "#fff",
+                pointStrokeColor: "#fff",
+                pointHighlightFill: "#fff",
+                tooltipTitleFontColor: "#fff",
+                pointHighlightStroke: "rgba(151,187,205,1)",
+                data: [ {% for data in sensors %} {{ data[2] }}, {% endfor %} ]
+            }
+        ]
+    }
+    var sensors = document.getElementById('sensors').getContext('2d');
+    new Chart(sensors).Line(sensorsData, {scaleFontColor: "#000"});
+</script>
+{% endblock %}

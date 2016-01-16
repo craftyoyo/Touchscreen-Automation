@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %}Feed{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>Raspberry Pi Spy</h2>
+                <ul class="list-unstyled">
+                    {% for feed in rspy['items'] %}
+                    <li>{{feed['title']}}</li>
+                    {% endfor %}
+                </ul>
+        </div>
+        <div class="col-sm-6">
+            <h2>Raspberry Pi Pod</h2>
+                <ul class="list-unstyled">
+                    {% for feed in rpypod['items'] %}
+                    <li>{{feed['title']}}</li>
+                    {% endfor %}
+                </ul>
+        </div>
+    </div>
+{% endblock %}

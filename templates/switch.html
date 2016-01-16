@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block title %}Switch{% endblock %}
+{% block content %}
+            {% if message %}
+                <div class="alert alert-success alert-dismissible" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  {{ message }}
+                </div>
+            {% endif %}
+
+    <br><br>
+	<div class="row" style="text-align:center;">
+	{% for pin in pins %}
+		<div class="col-sm-3">
+            <div class="panel panel-default box blurred-bg tinted">
+                <div class="panel-body">
+                    <h1>{{ pins[pin].name }}</h1>
+                    <p>
+                       {% if pins[pin].state == true %}
+                            <i class="fa fa-lightbulb-o fa-5x" style="color:#5CB85C"></i>
+                       {% else %}
+                            <i class="fa fa-lightbulb-o fa-5x" style="color:#d9534f"></i>
+                       {% endif %}
+                    </p>
+                    <br>
+                       {% if pins[pin].state == true %}
+                            <a href="/switch/{{pin}}/off"  class="btn btn-sm btn-danger">Off</a>
+                            <a href="/switch/{{pin}}/reset"  class="btn btn-sm btn-warning">Reset</a>
+                            <a href="/switch/{{pin}}/toggle"  class="btn btn-sm btn-primary">Toggle</a>
+
+
+                       {% else %}
+                            <a href="/switch/{{pin}}/on"  class="btn btn-sm btn-success">On</a>
+                            <a href="/switch/{{pin}}/reset"  class="btn btn-sm btn-warning">Reset</a>
+                            <a href="/switch/{{pin}}/toggle"  class="btn btn-sm btn-primary">Toggle</a>
+                       {% endif %}
+		        </div>
+            </div>
+        </div>
+	{% endfor %}
+		<div class="col-sm-3">
+            <div class="panel panel-default box blurred-bg tinted">
+                <div class="panel-body">
+                    <h1>All Rooms</h1>
+                    <p>
+                        <i class="fa fa-home fa-5x" style="color:#428bca"></i>
+                    </p>
+                    <br>
+                        <a href="/switch/on" class="btn btn-sm btn-success">On</a>
+                        <a href="/switch/off" class="btn btn-sm btn-danger">Off</a>
+                        <a href="/switch/reset" class="btn btn-sm btn-warning">Reset</a>
+                        <a href="/switch/toggle" class="btn btn-sm btn-primary">Toggle</a>
+		        </div>
+            </div>
+        </div>
+	</div>
+
+
+{% endblock %}

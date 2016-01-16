@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block title %}Network{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        {% for data in ping %}
+        <div class="col-sm-3">
+            <h4>
+                <i class="fa fa-{{data[3]}}"></i>
+
+                {{data[2]}}
+                <small>
+                    {% if data[4] == 'up' %}
+                        <i class="fa fa-arrow-up text-success"></i>
+                    {% elif data[4] == 'down' %}
+                        <i class="fa fa-arrow-down text-danger"></i>
+                    {% endif %}
+                </small>
+            </h4>
+            <ul class="list-unstyled">
+                <li><strong>IP Address :</strong> {{data[1]}}</li>
+                <li><strong>Type :</strong> {{data[3]}}</li>
+                <li>
+                    {% if data[4] == 'up' %}
+                        <strong>Status :</strong> <span class="text-success">Up</span>
+                    {% elif data[4] == 'down' %}
+                        <strong>Status :</strong> <span class="text-danger">Down</span>
+                    {% endif %}
+                </li>
+                <li><strong>Last Update :</strong> {{data[5]|timeAgo}}</li>
+            </ul>
+        </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

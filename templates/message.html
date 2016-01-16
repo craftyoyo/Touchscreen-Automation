@@ -1,0 +1,109 @@
+{% extends "layout.html" %}
+{% block title %}Message{% endblock %}
+{% block head %}
+    {{ super() }}
+
+    <link href="{{ url_for('static', filename='plugins/jquery-ui/jquery-ui.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='plugins/keyboard/css/keyboard.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='plugins/keyboard/css/keyboard-previewkeyset.css') }}" rel="stylesheet">
+
+    <script src="{{ url_for('static', filename='plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/keyboard/js/jquery.keyboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/keyboard/js/jquery.keyboard.extension-all.js') }}"></script>
+<style>
+.ui-keyboard {
+    border-radius: 0;
+    left: 0;
+    top: 560px;
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+}
+</style>
+<script>
+    $(function(){
+        $('#keyboard').keyboard({
+            css : {
+                input: 'form-control',
+                container: 'center-block dropdown-menu',
+                buttonDefault: 'btn btn-lg btn-default',
+                buttonHover: 'btn-primary',
+                buttonAction: 'active',
+                buttonDisabled: 'disabled'
+            },
+            position: {
+                of: '.keyboardInput',
+                my: 'center bottom',
+                at: 'center bottom',
+                at2: 'center bottom'
+            },
+            reposition: true,
+            autoAccept: true,
+            usePreview: false
+        });
+    });
+</script>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-sm-6">
+            <form action="{{ url_for('send_push') }}" method=POST class=form-horizontal>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Message</label>
+                    <div class="col-sm-10">
+                        <textarea rows="8" class="form-control" id="keyboard" placeholder="Content" name="Content"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-success">Send</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-6">
+            <h2>Messages</h2>
+            <ul class="chat">
+                {% for log in logs %}
+                    {% if log.sender_email == my_adress %}
+                        <li class="left clearfix"><span class="chat-img pull-left">
+                            <img src="http://i.imgur.com/sXsUOCg.png" alt="User Avatar" class="img-circle" />
+                            <p style="text-align:center;">
+                                <a href="/message/delete/{{log.iden}}"><i class="fa fa-trash-o"></i></a>
+                            </p>
+                        </span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <strong class="primary-font">{{log.sender_name}}</strong> <small class="pull-right text-muted">
+                                        <span class="glyphicon glyphicon-time"></span> {{log.created|timestampformat}}</small>
+                                </div>
+                                <p>
+                                    {{log.body}}
+                                </p>
+                            </div>
+                        </li>
+                    {%  else %}
+                        <li class="right clearfix"><span class="chat-img pull-right">
+                            <img src="http://i.imgur.com/BU3XB9T.png" alt="User Avatar" class="img-circle" />
+                            <p style="text-align:center;">
+                                <a href="/message/delete/{{log.iden}}"><i class="fa fa-trash-o"></i></a>
+                            </p>
+                        </span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <small class=" text-muted"><span class="glyphicon glyphicon-time"></span> {{log.created|timestampformat}}</small>
+                                    <strong class="pull-right primary-font">{{log.sender_name}}</strong>
+                                </div>
+                                <p>
+                                    {{log.body}}
+                                </p>
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endfor%}
+            </ul>
+        </div>
+    </div>
+
+    <div class="keyboardInput"></div>
+{% endblock %}

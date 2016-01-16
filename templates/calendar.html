@@ -1,0 +1,185 @@
+{% extends "layout.html" %}
+{% block title %}Calendar{% endblock %}
+{% block head %}
+    {{ super() }}
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='plugins/fullcalendar/fullcalendar.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/pickadate/lib/themes/default.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/pickadate/lib/themes/default.date.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/pickadate/lib/themes/default.time.css') }}">
+
+    <script src="{{ url_for('static', filename='js/moment.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/fullcalendar/fullcalendar.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/fullcalendar/lang/fr.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/pickadate/lib/picker.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/pickadate/lib/picker.date.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/pickadate/lib/picker.time.js') }}"></script>
+
+
+    <link href="{{ url_for('static', filename='plugins/jquery-ui/jquery-ui.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='plugins/keyboard/css/keyboard.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='plugins/keyboard/css/keyboard-previewkeyset.css') }}" rel="stylesheet">
+
+    <script src="{{ url_for('static', filename='plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/keyboard/js/jquery.keyboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='plugins/keyboard/js/jquery.keyboard.extension-all.js') }}"></script>
+<style>
+.ui-keyboard {
+    border-radius: 0;
+    left: 0;
+    top: 560px;
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+}
+</style>
+    <script>
+        $(function() {
+            $('#calendar').fullCalendar({
+                height: 650,
+                defaultDate: '{{now}}',
+                editable: false,
+                eventLimit: true,
+                timeFormat: 'H:mm',
+                displayEventEnd : true,
+                events: [
+                    {% for items in agenda %}
+                    {
+                        title : '{{ items['summary'] }}',
+			{% if items['description'] == 'wake' %}color : '#FF0033',{% endif %}
+			{% if items['description'] == 'work' %}color : '#9966FF',{% endif %}
+
+			{% if not items['start']['dateTime'] %}
+                            start : '{{items['start']['date']}}'
+                        {% else %}
+                            start : '{{items['start']['dateTime'][:-9]}}',
+                            end : '{{items['end']['dateTime'][:-9]}}',
+                        {% endif %}
+                    },
+                    {% endfor %}
+                ]
+            });
+        });
+        $(document).ready(function() {
+            $('#StartDate').pickadate({
+                format: 'yyyy-mm-dd',
+                formatSubmit: 'yyyy-mm-dd',
+                hiddenName: true
+            });
+            $('#StartTime').pickatime({
+                format: 'HH:i',
+                formatSubmit: 'HH:i',
+                hiddenName: true
+            });
+            $('#EndDate').pickadate({
+                format: 'yyyy-mm-dd',
+                formatSubmit: 'yyyy-mm-dd',
+                hiddenName: true
+            });
+            $('#EndTime').pickatime({
+                format: 'HH:i',
+                formatSubmit: 'HH:i',
+                hiddenName: true
+            });
+        });
+    $(function(){
+        $('.keyboard').keyboard({
+            css : {
+                input: 'form-control',
+                container: 'center-block dropdown-menu',
+                buttonDefault: 'btn btn-lg btn-default',
+                buttonHover: 'btn-primary',
+                buttonAction: 'active',
+                buttonDisabled: 'disabled'
+            },
+            position: {
+                of: '.keyboardInput',
+                my: 'center bottom',
+                at: 'center bottom',
+                at2: 'center bottom'
+            },
+            reposition: true,
+            autoAccept: true,
+            usePreview: false
+        });
+    });
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    <p>
+        <a class="btn btn-sm btn-success" role="button" data-toggle="collapse" href="#addEvent" aria-expanded="false" aria-controls="collapseAdd">Add An Event</a>
+        <a class="btn btn-sm btn-danger" role="button" data-toggle="collapse" href="#delEvent" aria-expanded="false" aria-controls="collapseDel">Delete An Event</a>
+    </p>
+
+
+<div class="collapse" id="addEvent">
+    <div class="well box blurred-bg tinted">
+        <form action="{{ url_for('add') }}" method=POST class=form-horizontal>
+            <div class="form-group">
+                <label for="inputSummary" class="col-sm-2 control-label">Summary</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control keyboard" id="inputSummary" placeholder="Event's Name" name="Summary">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputDescription" class="col-sm-2 control-label">Description</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control keyboard" id="inputDescription" placeholder="Description" name="Description">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="StartDate" class="col-sm-3 control-label">Start Date</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="StartDate" placeholder="StartDate" name="StartDate">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="StartTime" class="col-sm-3 control-label">Start Time</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="StartTime" placeholder="StartTime" name="StartTime">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="EndDate" class="col-sm-3 control-label">End Date</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="EndDate" placeholder="EndDate" name="EndDate">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="EndTime" class="col-sm-3 control-label">End Time</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="EndTime" placeholder="EndTime" name="EndTime">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="collapse" id="delEvent">
+    <div class="well box blurred-bg tinted">
+        <ul class="list-unstyled">
+            {% for items in agenda %}
+                <li>{{ items['summary'] }} <a href="/calendar/delete/{{ items['id'] }}" class="pull-right"><i class="fa fa-trash"></i></a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div id='calendar' class="box blurred-bg tinted"></div>
+
+{% endblock %}
