@@ -9,7 +9,7 @@ This project use :
 * Gmail (Calendar)
 * [Flask](http://flask.pocoo.org/)
 
-_You'll have to create an account to use the API._
+_You'll have to create an account to use the API_
 Some apps : 
 * gnome-schedule ```sudo apt-get install gnome-schedule```
 * xscreensaver ```sudo apt-get install xscreensaver```
@@ -36,6 +36,11 @@ sudo rpi-update
 ### MySQL : 
 ```
 sudo apt-get install mysql-server mysql-client python-mysqldb
+sudo nano /etc/mysql/my.cnf
+```
+Search [mysqld] and bind-address replace by the Pi's address
+```
+bind-address = 192.168.0.2 # For me
 ```
 When you're sure MySQL is working, dump the dump.sql file or just create all tables manually
 ```
@@ -76,7 +81,6 @@ CREATE TABLE `sensors` (
 sudo apt-get install build-essential python-dev
 sudo apt-get install mpd mpc
 sudo pip install Flask
-sudo pip install flask-bootstrap
 sudo pip install flask-appconfig
 sudo pip install flask-mysql
 sudo pip install python-mpd2
@@ -208,13 +212,6 @@ PUSHBULLET = {
 
 
 # Warning 
-Pushbullet(Message), MPD (Player) doesn't work really well and it's almost configured only **for me**.
-
-For Pushbullet I create an account ONLY for the pi who send to a contact (me)
-That's why you can see **line 391**:
-
-```pb.push_note('[Notification Rpi]', request.form['Content'], contact=pb.contacts[0])```
-
-pv.contacts[0] = my email address
+MPD (Player) doesn't work really well and it's almost configured only **for me**.
 
 Finally, if you want to correct the code or add something in the documentation (and correct my crappy english..) you're more than welcome ;) 
