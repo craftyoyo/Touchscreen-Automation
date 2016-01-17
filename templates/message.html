@@ -75,48 +75,88 @@
             </form>
         </div>
         <div class="col-sm-6">
-            <h2>Messages</h2>
-            <ul class="chat">
-                {% for log in logs %}
-                    {% if log.sender_email == my_adress %}
-                        <li class="left clearfix"><span class="chat-img pull-left">
-                            <img src="http://i.imgur.com/sXsUOCg.png" alt="User Avatar" class="img-circle" />
-                            <p style="text-align:center;">
-                                <a href="/message/delete/{{log.iden}}"><i class="fa fa-trash-o"></i></a>
-                            </p>
-                        </span>
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <strong class="primary-font">{{log.sender_name}}</strong> <small class="pull-right text-muted">
-                                        <span class="glyphicon glyphicon-time"></span> {{log.created|timestampformat}}</small>
-                                </div>
-                                <p>
-                                    {{log.body}}
-                                </p>
-                            </div>
-                        </li>
-                    {%  else %}
-                        <li class="right clearfix"><span class="chat-img pull-right">
-                            <img src="http://i.imgur.com/BU3XB9T.png" alt="User Avatar" class="img-circle" />
-                            <p style="text-align:center;">
-                                <a href="/message/delete/{{log.iden}}"><i class="fa fa-trash-o"></i></a>
-                            </p>
-                        </span>
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <small class=" text-muted"><span class="glyphicon glyphicon-time"></span> {{log.created|timestampformat}}</small>
-                                    <strong class="pull-right primary-font">{{log.sender_name}}</strong>
-                                </div>
-                                <p>
-                                    {{log.body}}
-                                </p>
-                            </div>
-                        </li>
-                    {% endif %}
-                {% endfor%}
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#home">Messages</a></li>
+                <li><a data-toggle="tab" href="#menu1">Archives</a></li>
             </ul>
+
+            <div class="tab-content">
+                <div id="home" class="tab-pane fade in active">
+                    <h2>Messages</h2>
+                    <ul class="chat">
+                        {% for log in logs %}
+                            {% if (log.sender_email != my_adress) and (log.dismissed == False) %}
+                                <li class="right clearfix"><span class="chat-img pull-right">
+                                    <img src="http://i.imgur.com/BU3XB9T.png" alt="User Avatar" class="img-circle" />
+                                    <p style="text-align:center;">
+                                        <a href="/message/dismissed/{{log.iden}}"><i class="fa fa-times"></i></a>
+                                    </p>
+                                </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <small class=" text-muted"><span class="glyphicon glyphicon-time"></span> {{log.created|timestampformat}}</small>
+                                            <strong class="pull-right primary-font">{{log.sender_name}}</strong>
+                                        </div>
+                                        <p>
+                                            {{log.body}}
+                                        </p>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endfor%}
+                    </ul>
+                </div>
+                <div id="menu1" class="tab-pane fade">
+                    <h2>Archives</h2>
+                    <ul class="chat">
+                        {% for log in logs %}
+                            {% if log.sender_email == my_adress %}
+                                <li class="left clearfix"><span class="chat-img pull-left">
+                                    <img src="http://i.imgur.com/sXsUOCg.png" alt="User Avatar" class="img-circle" />
+                                    <p style="text-align:center;">
+                                        <a href="/message/delete/{{log.iden}}"><i class="fa fa-trash-o"></i></a>
+                                    </p>
+                                </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <strong class="primary-font">{{log.sender_name}}</strong> <small class="pull-right text-muted">
+                                                <span class="glyphicon glyphicon-time"></span> {{log.created|timestampformat}}</small>
+                                        </div>
+                                        <p>
+                                            {{log.body}}
+                                        </p>
+                                    </div>
+                                </li>
+                            {%  else %}
+                                <li class="right clearfix"><span class="chat-img pull-right">
+                                    <img src="http://i.imgur.com/BU3XB9T.png" alt="User Avatar" class="img-circle" />
+                                    <p style="text-align:center;">
+                                        <a href="/message/delete/{{log.iden}}"><i class="fa fa-trash-o"></i></a>
+                                    </p>
+                                </span>
+                                    <div class="chat-body clearfix">
+                                        <div class="header">
+                                            <small class=" text-muted"><span class="glyphicon glyphicon-time"></span> {{log.created|timestampformat}}</small>
+                                            <strong class="pull-right primary-font">{{log.sender_name}}</strong>
+                                        </div>
+                                        <p>
+                                            {{log.body}}
+                                        </p>
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endfor%}
+                    </ul>
+                </div>
+            </div>
+
+
         </div>
     </div>
+
+
+
+
 
     <div class="keyboardInput"></div>
 {% endblock %}

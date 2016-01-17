@@ -322,7 +322,6 @@ def create_app(configfile='config.cfg'):
 
     @app.route('/feed')
     def feed():
-
         templateData = {
             'rspy': feedparser.parse(app.config['FEEDS']['feed_1']),
             'rpypod': feedparser.parse(app.config['FEEDS']['feed_2'])
@@ -395,6 +394,11 @@ def create_app(configfile='config.cfg'):
     @app.route('/message/delete/<iden>')
     def delete_push(iden):
         pb.delete_push(iden)
+        return redirect(url_for('message'))
+
+    @app.route('/message/dismissed/<iden>')
+    def dismissed_push(iden):
+        pb.dismiss_push(iden)
         return redirect(url_for('message'))
 
     @app.route('/camera')
