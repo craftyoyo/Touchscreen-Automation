@@ -380,6 +380,7 @@ def create_app(configfile='config.cfg'):
     def message():
         templateData = {
             'my_adress': app.config['PUSHBULLET']['mail'],
+            'contacts': pb.contacts,
             'logs': pb.get_pushes()
         }
         return render_template('message.html', **templateData)
@@ -387,7 +388,7 @@ def create_app(configfile='config.cfg'):
     @app.route('/message/send', methods=['POST'])
     def send_push():
         if request.method == 'POST':
-            pb.push_note('[Notification Rpi]', request.form['Content'], contact=pb.contacts[0])
+            pb.push_note('[Notification Rpi]', request.form['Content'], email=request.form['Contact'])
 
         return redirect(url_for('message'))
 
