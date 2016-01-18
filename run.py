@@ -446,6 +446,16 @@ def create_app(configfile='config.cfg'):
         }
         return render_template('network.html', **templateData)
 
+    @app.route('/reboot')
+    def reboot():
+        os.system('sudo reboot')
+        return redirect(url_for('index'))
+
+    @app.route('/shutdown')
+    def shutdown():
+        os.system('sudo halt')
+        return redirect(url_for('index'))
+
     return app
 
 if __name__ == '__main__':
