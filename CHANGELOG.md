@@ -1,5 +1,8 @@
 # Raspberry Home Control Changelog :
 
+1.1
+* New theme
+
 1.0.3
 * Notification system for Calendar and Message
 

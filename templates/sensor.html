@@ -10,7 +10,7 @@
         <div class="col-sm-6">
             <div class="panel panel-default box blurred-bg tinted">
                 <div class="panel-body">
-                    <h1>{{realtime[1]|dhtformat}} °C</h1>
+                    <h1 class="text-primary">{{realtime[1]|dhtformat}} °C</h1>
                     <p style="text-size: 5em;">
                         Temperature
                     </p>
@@ -20,7 +20,7 @@
         <div class="col-sm-6">
             <div class="panel panel-default box blurred-bg tinted">
                 <div class="panel-body">
-                    <h1>{{realtime[0]|dhtformat}} %</h1>
+                    <h1 class="text-primary">{{realtime[0]|dhtformat}} %</h1>
                     <p style="text-size: 5em;">
                         Humidity
                     </p>
@@ -85,6 +85,6 @@
             ]
         }
         var sensors = document.getElementById('sensors').getContext('2d');
-        new Chart(sensors).Line(sensorsData, {scaleFontColor: "#000"});
+        new Chart(sensors).Line(sensorsData, {scaleFontColor: "#fff"});
     </script>
 {% endblock %}

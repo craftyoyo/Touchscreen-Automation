@@ -438,7 +438,7 @@ def create_app(configfile='config.cfg'):
     @app.route('/network')
     def network():
         ping_cur = mysql.connect().cursor()
-        ping_cur.execute("SELECT * FROM (SELECT * FROM ping ORDER BY id DESC limit 5) AS ping ORDER BY id ASC")
+        ping_cur.execute("SELECT * FROM (SELECT * FROM ping ORDER BY id DESC limit 7) AS ping ORDER BY id ASC")
         ping = ping_cur.fetchall()
 
         templateData = {

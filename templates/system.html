@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
+    <div class="row refresh">
         <div class="col-sm-3">
             <h3>System</h3>
             <strong>Hostname :</strong> {{uname[1]}} <br>
@@ -50,7 +50,7 @@
             <div class="panel panel-default box blurred-bg tinted">
                 <div class="panel-body">
                     <h3>Cpu Temp</h3>
-                    <canvas id="cpu" width="1050" height="400" style="color:white;"></canvas>
+                    <canvas id="cpu" width="1050" height="380" style="color:white;"></canvas>
                 </div>
             </div>
         </div>
@@ -87,9 +87,36 @@
         }
         var cpu = document.getElementById('cpu').getContext('2d');
         new Chart(cpu).Line(cpuData, {
-		scaleFontColor: "#000",
+		scaleFontColor: "#fff",
         	scaleStartValue : 30 
 	});
+
+    var refreshTarget = ".refresh"
+
+    var extractElement = function(targetId, str){
+        var doc = (new DOMParser).parseFromString(str, 'text/html')
+        return doc.querySelector(targetId)
+    }
+
+    var replaceElements = function(targetId, element){
+        var target = document.querySelector(targetId)
+        target.parentElement.replaceChild(element, target)
+    }
+
+    var sendRequest = function(){
+        var req =  new XMLHttpRequest()
+        req.open('GET', window.location.pathname, true)
+        req.onreadystatechange = function () {
+            if(req.readyState === 4 && req.status === 200){
+                replaceElements(refreshTarget, extractElement(refreshTarget, req.response))
+            }
+        }
+        req.send()
+    }
+
+    if(typeof XMLHttpRequest === "function" && refreshTarget){
+        window.setInterval(sendRequest, 3000)
+    }
     </script>
 
 {% endblock %}
