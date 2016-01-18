@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, flash, render_template, redirect, request, url_for
 from flask_appconfig import AppConfig
 from flaskext.mysql import MySQL
 from datetime import datetime
@@ -308,6 +308,7 @@ def create_app(configfile='config.cfg'):
                     "timeZone": "Europe/Paris"
                 }
             }
+            flash('Event Successfully Add !')
             service.events().insert(calendarId=app.config['GMAIL']['calendar_id'], body=event).execute()
         return redirect(url_for('calendar'))
 
@@ -316,6 +317,7 @@ def create_app(configfile='config.cfg'):
         credentials = get_credentials()
         http = credentials.authorize(httplib2.Http())
         service = discovery.build('calendar', 'v3', http=http)
+        flash('Event Successfully Delete !')
         service.events().delete(calendarId=app.config['GMAIL']['calendar_id'], eventId=idevent).execute()
 
         return redirect(url_for('calendar'))
@@ -387,6 +389,7 @@ def create_app(configfile='config.cfg'):
     @app.route('/message/send', methods=['POST'])
     def send_push():
         if request.method == 'POST':
+            flash('Message Successfully Sent !')
             pb.push_note('[Notification Rpi]', request.form['Content'], email=request.form['Contact'])
 
         return redirect(url_for('message'))

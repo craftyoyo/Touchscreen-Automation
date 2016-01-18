@@ -1,5 +1,8 @@
 # Raspberry Home Control Changelog :
 
+1.0.3
+* Notification system for Calendar and Message
+
 1.0.2
 * New interface for Message with unread messages and Archives
 
