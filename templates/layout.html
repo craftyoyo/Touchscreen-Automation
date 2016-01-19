@@ -88,8 +88,7 @@
     <div class="container">
     {% with messages = get_flashed_messages() %}
         {% if messages %}
-            <div class="alert alert-success alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <div class="alert alert-success fade in" role="alert">
                 {% for message in messages %}
                     {{message}}
                 {% endfor %}
@@ -115,6 +114,5 @@ Display a screensaver after 5 secondes
         </div>
     </div>
 -->
-
 </body>
 </html>
