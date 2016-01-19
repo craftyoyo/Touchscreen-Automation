@@ -92,6 +92,9 @@
         ]
     }
     var sensors = document.getElementById('sensors').getContext('2d');
-    new Chart(sensors).Line(sensorsData, {scaleFontColor: "#fff"});
+    new Chart(sensors).Line(sensorsData, {
+        scaleFontColor: "#fff",
+        responsive: true
+    });
 </script>
 {% endblock %}

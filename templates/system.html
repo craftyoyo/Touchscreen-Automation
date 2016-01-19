@@ -88,8 +88,9 @@
         var cpu = document.getElementById('cpu').getContext('2d');
         new Chart(cpu).Line(cpuData, {
 		scaleFontColor: "#fff",
-        	scaleStartValue : 30 
-	});
+        	scaleStartValue : 30,
+		    responsive: true
+	    });
 
     var refreshTarget = ".refresh"
 

@@ -34,7 +34,7 @@
             <div class="panel panel-default box blurred-bg tinted">
                 <div class="panel-body">
                     <h3>Sensor Humidity / Temperature</h3>
-                    <canvas id="sensors" width="1050" height="400" style="color:white;"></canvas>
+                    <canvas id="sensors" width="1050" height="380" style="color:white;"></canvas>
                 </div>
             </div>
         </div>
@@ -85,6 +85,9 @@
             ]
         }
         var sensors = document.getElementById('sensors').getContext('2d');
-        new Chart(sensors).Line(sensorsData, {scaleFontColor: "#fff"});
+        new Chart(sensors).Line(sensorsData, {
+            scaleFontColor: "#fff",
+            responsive: true
+        });
     </script>
 {% endblock %}
