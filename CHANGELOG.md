@@ -1,7 +1,14 @@
 # Raspberry Home Control Changelog :
 
+1.1.1
+![Pushbullet](http://i.imgur.com/j7jKdr3.png)
+* Added Random avatar generator from [Richardasaurus](https://github.com/richardasaurus/randomavatar) 
+```pip install randomavatar``` 
+
 1.1
 * New theme
+* Charts are now responsive (index/sensors/system)
+
 
 1.0.3
 * Notification system for Calendar and Message

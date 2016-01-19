@@ -83,6 +83,7 @@ sudo pip install python-mpd2
 sudo pip install psutil
 sudo pip install feedparser
 sudo pip install pushbullet.py
+sudo pip install randomavatar
 sudo pip install --upgrade google-api-python-client
 ```
 

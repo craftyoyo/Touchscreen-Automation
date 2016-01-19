@@ -16,6 +16,7 @@ import Adafruit_DHT as dht
 import feedparser
 from pushbullet import Pushbullet
 from mpd import MPDClient
+from randomavatar.randomavatar import Avatar
 
 import time
 import os
@@ -142,6 +143,12 @@ def create_app(configfile='config.cfg'):
         duration = datetime.fromtimestamp(int(tmp[0])).strftime('%M:%S')
         return duration
 
+    def avatarGen(value):
+        avatar = Avatar(rows=10, columns=10)
+        image_byte_array = avatar.get_image(string=value, width=50, height=50, pad=10)
+        avatar.save(image_byte_array=image_byte_array,  save_location='static/img/'+value+'.png')
+        return 'static/img/'+value+'.png'
+
     def timeAgo(time=False):
         now = datetime.now()
         if type(time) is int:
@@ -186,6 +193,7 @@ def create_app(configfile='config.cfg'):
     app.jinja_env.filters['duration'] = duration
     app.jinja_env.filters['timeAgo'] = timeAgo
     app.jinja_env.filters['currentDuration'] = currentDuration
+    app.jinja_env.filters['avatarGen'] = avatarGen
 
     @app.route('/')
     def index():
@@ -231,14 +239,17 @@ def create_app(configfile='config.cfg'):
     @app.route('/switch/<master>')
     def master(master):
         if master == 'on':
+            flash('Turned all rooms on!')
             for pin in pins:
                 GPIO.output(pin, GPIO.HIGH)
 
         if master == 'off':
+            flash('Turned all rooms off!')
             for pin in pins:
                 GPIO.output(pin, GPIO.LOW)
 
         if master == 'toggle':
+            flash('Toggle all rooms !')
             for pin in pins:
                 GPIO.output(pin, not GPIO.input(pin))
 
@@ -247,26 +258,30 @@ def create_app(configfile='config.cfg'):
                 GPIO.output(pin, GPIO.LOW)
                 time.sleep(5)
                 GPIO.output(pin, GPIO.HIGH)
-
+            flash('Reset all rooms !')
         return redirect(url_for('switch'))
 
     @app.route('/switch/<changePin>/<action>')
     def action(changePin, action):
         changePin = int(changePin)
-
+        deviceName = pins[changePin]['name']
         if action == 'on':
+            flash('Turned '+deviceName+' on!')
             GPIO.output(changePin, GPIO.HIGH)
 
         if action == 'off':
+            flash('Turned '+deviceName+' off!')
             GPIO.output(changePin, GPIO.LOW)
 
         if action == 'toggle':
+            flash('Toggled '+deviceName+' !')
             GPIO.output(changePin, not GPIO.input(changePin))
 
         if action == 'reset':
             GPIO.output(changePin, GPIO.LOW)
             time.sleep(5)
             GPIO.output(changePin, GPIO.HIGH)
+            flash('Reset '+deviceName+' !')
 
         return redirect(url_for('switch'))
 
