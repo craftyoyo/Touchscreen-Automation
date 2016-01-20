@@ -2,20 +2,21 @@
 
 ![Index](http://i.imgur.com/tN02Tov.png)
 
-This project use : 
-* [OpenWeatherMap](http://openweathermap.org/)*
-* [Pushbullet](https://www.pushbullet.com/)*
+This project uses the following technologies:
+* [OpenWeatherMap](http://openweathermap.org/) \*
+* [Pushbullet](https://www.pushbullet.com/) \*
+* Gmail (Calendar functionality) \*
 * [MPD](http://www.musicpd.org/)
-* Gmail (Calendar)
 * [Flask](http://flask.pocoo.org/)
 
-_You'll have to create an account to use the API_
-Some apps : 
+_\* You'll have to create an account to use the API._
+
+Dependencies:
 * gnome-schedule ```sudo apt-get install gnome-schedule```
 * xscreensaver ```sudo apt-get install xscreensaver```
 * MPD / MPC ```sudo apt-get install mpd mpc```
 
-Some Libs (html/js): 
+HTML/JS libraries used: 
 * [Fullcalendar](http://fullcalendar.io/)
 * [Mottie/Keyboard](https://github.com/Mottie/Keyboard)
 * [Font-Awesome](https://fortawesome.github.io/Font-Awesome/)
@@ -23,7 +24,9 @@ Some Libs (html/js):
 * [ChartJs](http://www.chartjs.org/)
 * [PickaDate](http://amsul.ca/pickadate.js/) (DatePicker and TimePicker)
 
-And is running on Raspberry Pi 2, Raspbian (Jessie) and [15.6" touchscreen](http://www.chalk-elec.com/?page_id=1280#!/15-6-HDMI-interface-LCD-with-capacitive-touchscreen/p/38127425/category=3094861).
+Running on Raspberry Pi 2, Raspbian (Jessie) with a [15.6" touchscreen](http://www.chalk-elec.com/?page_id=1280#!/15-6-HDMI-interface-LCD-with-capacitive-touchscreen/p/38127425/category=3094861).
+
+## Instructions
 
 ### Update your Pi:
 
@@ -33,11 +36,13 @@ sudo apt-get upgrade
 sudo apt-get dist-upgrade
 sudo rpi-update
 ```
-### MySQL : 
+
+### Install MySQL:
 ```
 sudo apt-get install mysql-server mysql-client python-mysqldb
 ```
-When you're sure MySQL is working, dump the dump.sql file or just create all tables manually
+
+After you have MySQL working, import the **dump.sql** file or just create all the tables manually.
 
 ```
 DROP TABLE IF EXISTS `cpu`;
@@ -72,7 +77,8 @@ CREATE TABLE `sensors` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
-### Install all the dependances : 
+### Install all the dependencies:
+
 ```
 sudo apt-get install build-essential python-dev
 sudo apt-get install mpd mpc
@@ -87,20 +93,27 @@ sudo pip install randomavatar
 sudo pip install --upgrade google-api-python-client
 ```
 
-### MPD:
-Edit the configuration file ```sudo nano /etc/mpd.conf```
+### MPD (music player):
+Edit the configuration file:
 
 ```
-music_directory		"/media/usbKey/Musiques"
-playlist_directory		"/media/usbKey/Playlists"
+sudo nano /etc/mpd.conf
 ```
-Comment
+
 ```
-#user				"mpd"
-#group                          "nogroup"
-#bind_to_address		"localhost"
+music_directory		"/path/to/your/music/folder"
+playlist_directory	"/path/to/your/playlist/folder"
 ```
-for the audio output I use ALSA if you use something else, just check Google to know ho to modified this part.
+
+Comment out these lines:
+
+```
+user			"mpd"
+group			"nogroup"
+bind_to_address		"localhost"
+```
+
+I use ALSA for audio output. If you use something else, check Google for instructions on how to modify this part.
 
 ```
 audio_output {
@@ -109,47 +122,62 @@ audio_output {
 	device		"hw:0,0"
 }
 ```
-When it's done, reload the configuration file
+
+After doing the above changse, reload the configuration file:
+
 ```sudo /etc/init.d/mpd force-restart```
 
-### DHT22 (Thanks Adafruit) :
+### DHT22 temperature-humidity sensor (thanks Adafruit):
 
 ```
-cd Desktop
 git clone https://github.com/adafruit/Adafruit_Python_DHT.git
-cd Adafruit_Python_DHT 
-sudo python setup.py install 
-cd ../ 
+cd Adafruit_Python_DHT
+sudo python setup.py install
+cd ..
 sudo rm -rf Adafruit_Python_DHT
 ```
 
-### Google (Calendar)
+### Google (Calendar functionality):
 * Create a new project on the [Google Developers Console](https://console.developers.google.com/)
 * Enable the Calendars API
-* Create new Client ID for standalone application and download the JSON as client_secrets.json and set client_secret_file = 'client_secrets.json' in config.cfg
+* Create a new Client ID for standalone application
+* Download the JSON as **client_secrets.json**
+* Set `client_secret_file = 'client_secrets.json'` in the **config.cfg** file located in the **Touchscreen-Automation** folder
 
-### Crontab : 
-in the cron_task you'll find some scripts to check en save some informations (each file need to be modified :
-* CPU Temp with cron_cpu_temp.py
-* Temp/Humidity with cron_dht22.py
-* Ping some IP(s) with cron_ping.py
+### Crontab:
+In the `cron_task` folder you'll find some scripts to check and save data (each file needs to be modified):
+* CPU Temperature: **cron_cpu_temp.py**
+* Temperature / Humidity: **cron_dht22.py**
+* Ping IP address(es): **cron_ping.py**
 
-Personally I use [gnome-schedule](http://gnome-schedule.sourceforge.net/) ```sudo apt-get install gnome-schedule``` (yes, i know, it use Gnome and Raspbian LXCFE shame on me ...)
+Personally I use [gnome-schedule](http://gnome-schedule.sourceforge.net/).
 
-Start the program ```sudo gnome-schedule```
+```
+sudo apt-get install gnome-schedule
+```
 
-* cron_cpu_temp.py each 30 minutes
-* cron_dht22.py each hour
-* cron_ping.py each 5 minutes
+(yes, I know, it uses GNOME and Raspbian LXCFE, shame on me...)
 
-(little advice, don't forget the "python" command before your file ^^)
+Start the scheduler:
 
+```
+sudo gnome-schedule
+```
 
-Finally when everything is done go to the folder and run it with 
-```sudo python run.py```
+* Run cron_cpu_temp.py every 30 minutes
+* Run cron_dht22.py every hour
+* Run cron_ping.py every 5 minutes
 
-### Configuration file (config.cfg)
-This file is not really difficult to edit. Just be careful to put the right datas :
+*Tip: don't forget the `python` command before your file.*
+
+Finally when everything is done go to the **Touchscreen-Automation** folder and run the application:
+
+```
+sudo python run.py
+```
+
+### Configuration file (config.cfg):
+This file is easy to edit. Just be careful to insert the right values:
 
 ```
 SECRET_KEY = 'c9p2Ie41R931iLXS1W4v0cbr0Wm533j2Md37b4w16n3dbX'
@@ -163,7 +191,8 @@ MYSQL = {
     'database' : 'SQL DATABASE'
 }
 
-I use BCM name for pin number so it's "26" for GPIO 26 and not "37"
+# I use BCM name for pin number so it's "26" for GPIO 26 and not "37"
+# State is always empty and type is always "production"
 PINS = {
     21 : {'name' : 'Hall',          'state' : '', 'type' : 'production'},
     20 : {'name' : 'Living Room',   'state' : '', 'type' : 'production'},
@@ -174,9 +203,7 @@ PINS = {
     12 : {'name' : 'Bedroom 2',     'state' : '', 'type' : 'production'}
 }
 
-# State's always empty and Type  always "production"
-
-DHT22_PIN = '4' #GPIO 4
+DHT22_PIN = '4' # GPIO 4
 
 GMAIL = {
     'calendar_id' : 'ID OF YOUR CALENDAR@group.calendar.google.com',
@@ -196,7 +223,7 @@ MPD = {
 WEATHER = {
     'apikey' : 'YOUR API KEY',
     'city' : 'YOUR CITY',
-    'units' : 'metric', # metric  (°C) or imperial  (F)
+    'units' : 'metric', # metric (°C) or imperial (F)
     'lang' : 'en'
 }
 
@@ -206,9 +233,7 @@ PUSHBULLET = {
 }
 ```
 
+# Warning:
+MPD (music player) doesn't work well and it's configured only **for me**.
 
-
-# Warning 
-MPD (Player) doesn't work really well and it's almost configured only **for me**.
-
-Finally, if you want to correct the code or add something in the documentation (and correct my crappy english..) you're more than welcome ;) 
+Finally, if you want to correct the code or add something in the documentation (and correct my crappy english...) you're more than welcome. ;)
