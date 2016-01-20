@@ -108,8 +108,8 @@ playlist_directory	"/path/to/your/playlist/folder"
 Comment out these lines:
 
 ```
-user			"mpd"
-group			"nogroup"
+user				"mpd"
+group				"nogroup"
 bind_to_address		"localhost"
 ```
 
